@@ -12,7 +12,7 @@ pub struct TerminalGuard;
 
 impl Drop for TerminalGuard {
     fn drop(&mut self) {
-        execute!(stdout(), LeaveAlternateScreen);
-        disable_raw_mode();
+        let _ = execute!(stdout(), LeaveAlternateScreen);
+        let _ = disable_raw_mode();
     }
 }
