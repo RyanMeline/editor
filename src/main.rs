@@ -28,23 +28,22 @@ use crossterm:: {
         LeaveAlternateScreen,
     },
     style::Print,
+    cursor::{
+        MoveTo,
+    },
 };
 
 fn setup_term() -> Result<()> {
-    enable_raw_mode()?;
-    execute!(stdout(), EnterAlternateScreen)?;
-    Ok(())
-}
-
-fn write_char(c: char) -> Result<()> {
-    execute!(stdout(), Print(c.to_string()))?;
-    stdout().flush()?;
+    let _ = enable_raw_mode()?;
+    let _ = execute!(stdout(), EnterAlternateScreen)?;
     Ok(())
 }
 
 fn main() -> Result<()>{
     setup_term()?;
     let _guard = TerminalGuard;
+    execute!(stdout(), MoveTo(0, 0))?;
+
     'main_loop: loop {
         if poll(Duration::from_millis(500))? {
             match read()? {
@@ -60,7 +59,8 @@ fn main() -> Result<()>{
                                 _ => {},
                             }
                         }
-                        KeyCode::Char(c) => _ = write_char(c),
+                        KeyCode::Char(c) => { execute!(stdout(), Print(c.to_string()))?; },
+                        KeyCode::Enter => { execute!(stdout(), Print("\n"))? },
                         _ => {}
                     }
                 }
