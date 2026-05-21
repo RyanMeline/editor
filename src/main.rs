@@ -54,7 +54,6 @@ fn main() -> Result<()>{
                     }
                     match event.code {
                         KeyCode::Esc => break 'main_loop,
-                        // KeyCode::Char('q') if event.modifiers.contains(KeyModifiers::CONTROL) => break 'main_loop,
                         KeyCode::Char(c) if event.modifiers.contains(KeyModifiers::CONTROL) => {
                             match c {
                                 'q' => break 'main_loop,
