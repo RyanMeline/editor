@@ -10,9 +10,14 @@ pub struct Editor {
 }
 
 impl Editor {
-    fn new(&self) -> Self {
-        Self {
-
+    pub fn new() -> Self {
+        Editor {
+            cursor_row : 0,
+            cursor_col : 0,
+            scroll_offset : 0,
+            unsaved : false,
+            filename: None,
+            lines: vec![String::new()],
         }
     }
 
@@ -20,7 +25,7 @@ impl Editor {
 
     }
 
-    fn open_file(Option<String>) {
+    fn open_file(filename: Option<String>) {
         //set filename to whats passed in
         //Load in the data
         //set cursor to 0,0
@@ -36,8 +41,37 @@ impl Editor {
 
     }
 
-    fn move_cursor(Direction) {
-
+    fn move_cursor(dir: Direction) {
+        match {
+            Direction::Left => {
+                if self.cursor_row == 0 {
+                    execute!(stdout(), MoveTo(cursor_row, cursor_col));
+                } else {
+                    execute!(stdout(), MoveTo(cursor_row - 1, cursor_col));
+                }
+            },
+            Direction::Right => {
+                if self.cursor_row == line[cursor_col].len()-1 {
+                    execute!(stdout(), MoveTo(cursor_row, cursor_col));
+                } else {
+                    execute!(stdout(), MoveTo(cursor_row - 1, cursor_col));
+                }
+            },
+            Direction::Down => {
+                if self.cursor_col == lines.len()-1 {
+                    execute!(stdout(), MoveTo(cursor_row, cursor_col));
+                } else {
+                    execute!(stdout(), MoveTo(cursor_row, cursor_col - 1));
+                }
+            },
+            Direction::Up => {
+                if self.cursor_col == 0 {
+                    execute!(stdout(), MoveTo(cursor_row, cursor_col));
+                } else {
+                    execute!(stdout(), MoveTo(cursor_row, cursor_col + 1));
+                }
+            },
+        };
     }
 
     fn save() {

@@ -3,6 +3,11 @@ mod editor;
 mod keymap;
 
 use terminal::TerminalGuard;
+use editor::{
+    Editor,
+    Action,
+};
+
 use std::{
     time::Duration,
     io::{
@@ -42,6 +47,8 @@ fn setup_term() -> Result<()> {
 fn main() -> Result<()>{
     setup_term()?;
     let _guard = TerminalGuard;
+    let mut editor = Editor::new();
+
     execute!(stdout(), MoveTo(0, 0))?;
 
     'main_loop: loop {
