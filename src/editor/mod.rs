@@ -131,7 +131,7 @@ impl Editor {
                 //     //do nothing
                 //     execute!(stdout(), MoveRight(1)).unwrap();
                 // } else {
-                    self.cursor_column += 1;
+                    self.cursor_column += 1; //swap line no and column
                     //execute!(stdout(), MoveTo(c_line_no, c_column + 1)).unwrap();
                     execute!(stdout(), MoveRight(1)).unwrap();
                 // }
@@ -145,7 +145,7 @@ impl Editor {
                     if self.lines[self.cursor_line_no-1].len() < self.cursor_column {
                         self.cursor_column = self.lines[self.cursor_line_no-1].len();
                     }
-                    self.cursor_line_no -= 1;
+                    self.cursor_line_no -= 1; //swap line no and column
                     //execute!(stdout(), MoveTo(c_line_no - 1, c_column)).unwrap();
                     execute!(stdout(), MoveUp(1)).unwrap();
                 }
@@ -159,7 +159,7 @@ impl Editor {
                     if self.lines[self.cursor_line_no+1].len() < self.cursor_column {
                         self.cursor_column = self.lines[self.cursor_line_no+1].len();
                     }
-                    self.cursor_line_no += 1;
+                    self.cursor_line_no += 1; //swap line no and column
                     //execute!(stdout(), MoveTo(c_line_no + 1, c_column)).unwrap();
                     execute!(stdout(), MoveDown(1)).unwrap();
                 }
