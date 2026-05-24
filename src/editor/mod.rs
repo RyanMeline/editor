@@ -1,3 +1,38 @@
+use std::{
+    time::Duration,
+    io::{
+        stdout, 
+        Result, 
+        self, 
+        Write,
+    },
+    convert::{
+        TryInto,
+        TryFrom,
+    },
+};
+
+use crossterm:: {
+    execute,
+    event:: {
+        poll,
+        Event,
+        KeyCode,
+        KeyModifiers,
+        read,
+    },
+    terminal::{
+        enable_raw_mode,
+        disable_raw_mode,
+        EnterAlternateScreen,
+        LeaveAlternateScreen,
+    },
+    style::Print,
+    cursor::{
+        MoveTo,
+    },
+};
+
 pub struct Editor {
     lines:          Vec<String>,
     cursor_row:     usize,
@@ -25,7 +60,7 @@ impl Editor {
 
     }
 
-    fn open_file(filename: Option<String>) {
+    fn open_file(&mut self, filename: Option<String>) {
         //set filename to whats passed in
         //Load in the data
         //set cursor to 0,0
@@ -33,42 +68,45 @@ impl Editor {
 
     }
 
-    fn insert_char(c: char) {
+    fn insert_char(&mut self, c: char) {
 
     }
 
-    fn delete_char() {
+    fn delete_char(&mut self) {
 
     }
 
-    fn move_cursor(dir: Direction) {
-        match {
+    fn move_cursor(&mut self, dir: Direction) {
+        let c_row: u16 = self.cursor_row.try_into().unwrap();
+        let c_col: u16 = self.cursor_col.try_into().unwrap(); 
+        
+        match dir {
             Direction::Left => {
                 if self.cursor_row == 0 {
-                    execute!(stdout(), MoveTo(cursor_row, cursor_col));
+                    execute!(stdout(), MoveTo(c_row, c_col)).unwrap();
                 } else {
-                    execute!(stdout(), MoveTo(cursor_row - 1, cursor_col));
+                    execute!(stdout(), MoveTo(c_row - 1, c_col)).unwrap();
                 }
             },
             Direction::Right => {
-                if self.cursor_row == line[cursor_col].len()-1 {
-                    execute!(stdout(), MoveTo(cursor_row, cursor_col));
+                if self.cursor_row == self.lines[self.cursor_col].len()-1 {
+                    execute!(stdout(), MoveTo(c_row, c_col)).unwrap();
                 } else {
-                    execute!(stdout(), MoveTo(cursor_row - 1, cursor_col));
+                    execute!(stdout(), MoveTo(c_row - 1, c_col)).unwrap();
                 }
             },
             Direction::Down => {
-                if self.cursor_col == lines.len()-1 {
-                    execute!(stdout(), MoveTo(cursor_row, cursor_col));
+                if self.cursor_col == self.lines.len()-1 {
+                    execute!(stdout(), MoveTo(c_row, c_col)).unwrap();
                 } else {
-                    execute!(stdout(), MoveTo(cursor_row, cursor_col - 1));
+                    execute!(stdout(), MoveTo(c_row, c_col - 1)).unwrap();
                 }
             },
             Direction::Up => {
                 if self.cursor_col == 0 {
-                    execute!(stdout(), MoveTo(cursor_row, cursor_col));
+                    execute!(stdout(), MoveTo(c_row, c_col)).unwrap();
                 } else {
-                    execute!(stdout(), MoveTo(cursor_row, cursor_col + 1));
+                    execute!(stdout(), MoveTo(c_row, c_col + 1)).unwrap();
                 }
             },
         };
