@@ -49,31 +49,30 @@ fn main() -> Result<()>{
     let _guard = TerminalGuard;
     let mut editor = Editor::new();
 
+    
     execute!(stdout(), MoveTo(0, 0))?;
 
     'main_loop: loop {
-        if poll(Duration::from_millis(500))? {
-            match read()? {
-                Event::Key(event) => {
-                    if event.is_release() {
-                        continue;
-                    }
-                    match event.code {
-                        KeyCode::Esc => break 'main_loop,
-                        KeyCode::Char(c) if event.modifiers.contains(KeyModifiers::CONTROL) => {
-                            match c {
-                                'q' => break 'main_loop,
-                                _ => {},
-                            }
-                        }
-                        KeyCode::Char(c) => { execute!(stdout(), Print(c.to_string()))?; },
-                        KeyCode::Enter => { execute!(stdout(), Print("\n"))? },
-                        _ => {}
-                    }
-                }
-                _ => {}
-            }
+        let action: Action = keymap::handle_event(read()?);
+        match action {
+            Action::InsertChar(c) => editor.insert_char(c),
+            Action::DeleteCharBack => {},
+            Action::DeleteCharForward => {},
+            Action::InsertNewLine => editor.new_line(),
+            Action::MoveCursor(dir) => editor.move_cursor(dir),
+            Action::MoveStartOfLine => {},
+            Action::MoveEndOfLine => {},
+            Action::Save => {},
+            Action::Open(str) => {},
+            Action::Quit => { break 'main_loop },
+            Action::SaveQuit => { //save stuff
+                    break 'main_loop;
+                },
+            Action::None => continue,
         }
+        // if poll(Duration::from_millis(500))? {
+            
+        // }
     }
     Ok(())
 }
