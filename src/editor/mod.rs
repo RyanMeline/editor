@@ -70,11 +70,11 @@ impl Editor {
         //draw text inside screen bounds
         execute!(stdout(), Hide).unwrap();
 
+        //Come up with some logic to determine start pos
+        execute!(stdout(), MoveTo(0, 0)).unwrap();
         //this can probably be changed to redraw after cursor
         execute!(stdout(), Clear(ClearType::All)).unwrap();
 
-        //Come up with some logic to determine start pos
-        execute!(stdout(), MoveTo(0, 0)).unwrap();
         for line in &self.lines {
             execute!(stdout(), Print(line.get_line())).unwrap();
             execute!(stdout(), Print("\n")).unwrap();
