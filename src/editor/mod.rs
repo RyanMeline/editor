@@ -108,6 +108,8 @@ impl Editor {
     }
 
     pub fn new_line(&mut self) {
+        //check if gap_end is == buf.len()-1, if its *not*, take all the text after it, and push
+        //that to a new line
         let l_new = Line::new();
         self.lines.insert(self.cursor_line_no + 1, l_new);
         self.cursor_line_no += 1;
