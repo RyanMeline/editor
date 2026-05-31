@@ -28,7 +28,7 @@ fn setup_term() -> Result<()> {
 }
 
 fn main() -> Result<()> {
-    setup_term()?;
+    setup_term().unwrap();
     let _guard = TerminalGuard;
     let mut editor = Editor::new();
 
@@ -53,6 +53,7 @@ fn main() -> Result<()> {
             }
             Action::None => continue,
         }
+        editor.update_position_tracker();
         // if poll(Duration::from_millis(500))? {
 
         // }
